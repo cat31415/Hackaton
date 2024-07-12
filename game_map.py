@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import pandas as pd
 
 class Block:
     def __init__(self, x: int, y: int):
@@ -8,7 +8,7 @@ class Block:
 class StaticBlock(Block):
     def __init__(self, x: int, y: int, block_type: str):
         super().__init__(x, y)
-        self.block_type = block_type  # "wall" или "zombie_spawn"
+        self.block_type = block_type  # "wall" или "default"
 
 class Base(Block):
     def __init__(self, id: int, x: int, y: int, health: int, strength: int, is_main: bool):
@@ -32,11 +32,8 @@ class Zombie(Block):
         self.id = id
         self.health = health
         self.strength = strength
-        self.zombie_type = zombie_type  # например, "walker", "runner"
-        self.direction = direction  # например, "north", "south"
-
-import pandas as pd
-from typing import List
+        self.zombie_type = zombie_type
+        self.direction = direction 
 
 class GameMap:
     def __init__(self):
@@ -74,3 +71,14 @@ class GameMap:
         all_blocks = self.get_all_blocks()
         return all_blocks[((all_blocks['x'] - x) ** 2 + (all_blocks['y'] - y) ** 2) ** 0.5 <= radius]
 
+    def load_static_blocks(self, json_data):
+        for block in json_data:
+            self.add_static_block(block['x'], block['y'], block['block_type'])
+
+    def load_dynamic_blocks(self, json_data):
+        for block in json_data['player_bases']:
+            self.add_player_base(block['id'], block['x'], block['y'], block['health'], block['strength'], block['is_main'])
+        for block in json_data['enemy_bases']:
+            self.add_enemy_base(block['id'], block['x'], block['y'], block['health'], block['strength'], block['is_main'])
+        for block in json_data['zombies']:
+            self.add_zombie(block['id'], block['x'], block['y'], block['health'], block['strength'], block['zombie_type'], block['direction'])
