@@ -3,8 +3,16 @@ from config import BASE_URL, HEADERS
 import json
 import os
 
-def read_json_file():
-    file_name = "exampleMap.json"
+def read_json_file_Stat():
+    file_name = "StaticBlocks.json"
+    current_dir = os.path.dirname(__file__)
+    file_path = os.path.join(current_dir, file_name)
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+    return data
+
+def read_json_file_Not_Stat():
+    file_name = "NotStaticBlocks.json"
     current_dir = os.path.dirname(__file__)
     file_path = os.path.join(current_dir, file_name)
     with open(file_path, 'r') as f:

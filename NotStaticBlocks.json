@@ -414,7 +414,17 @@
             "direction": "right"
         }
     ],
-    "enemyBlocks": null,
+    "enemyBlocks": [
+        {
+        "attack": 10,
+        "health": 100,
+        "isHead": true,
+        "lastAttack": {},
+        "name": "player-test",
+        "x": 105,
+        "y": 157
+        }
+        ],
     "turnEndsInMs": 1576,
     "turn": 63
 }
