@@ -1,54 +1,51 @@
 import requests
-import time
+import json
 
-BASE_URL = "6690ca5ad88f26690ca5ad88f6"
-AUTH_TOKEN = "your_auth_token_here"
-HEADERS = {
-    "X-Auth-Token": AUTH_TOKEN,
-    "Content-Type": "application/json"
+# Установите ваш токен аутентификации
+AUTH_TOKEN = '6690ca5ad88f26690ca5ad88f6'
+BASE_URL = 'https://games-test.datsteam.dev/'
+
+# Заголовки для аутентификации
+headers = {
+    'Content-Type': 'application/json',
+    'X-Auth-Token': AUTH_TOKEN
 }
 
+# Функция для регистрации на раунд
 def register_for_round():
-    url = f"{BASE_URL}/play/zombidef/participate"
-    response = requests.put(url, headers=HEADERS)
+    url = f'{BASE_URL}/play/zombidef/participate'
+    response = requests.put(url, headers=headers)
     if response.status_code == 200:
         print("Successfully registered for the round.")
     else:
-        print(f"Failed to register: {response.status_code} - {response.text}")
+        print(f"Failed to register: {response.status_code} {response.text}")
 
+# Функция для отправки команд на строительство и атаку
 def send_commands(build_commands, attack_commands):
-    url = f"{BASE_URL}/play/zombidef/command"
-    payload = {
+    url = f'{BASE_URL}/play/zombidef/command'
+    commands = {
         "build": build_commands,
         "attack": attack_commands
     }
-    response = requests.post(url, headers=HEADERS, json=payload)
+    response = requests.post(url, headers=headers, data=json.dumps(commands))
     if response.status_code == 200:
-        print("Commands successfully sent.")
+        print("Commands sent successfully.")
     else:
-        print(f"Failed to send commands: {response.status_code} - {response.text}")
+        print(f"Failed to send commands: {response.status_code} {response.text}")
 
-def build_base(x, y):
-    # Пример команды строительства базы на координатах (x, y)
-    build_commands = [{"x": x, "y": y}]
-    send_commands(build_commands, [])
+# Пример команд на строительство и атаку
+build_commands = [
+    {"x": 5, "y": 5},
+    {"x": 5, "y": 6}
+]
 
-def attack_zombie(x, y):
-    # Пример команды атаки зомби на координатах (x, y)
-    attack_commands = [{"x": x, "y": y}]
-    send_commands([], attack_commands)
+attack_commands = [
+    {"x": 10, "y": 10},
+    {"x": 11, "y": 10}
+]
 
-if __name__ == "__main__":
-    register_for_round()
-    time.sleep(5)  # Ожидание перед началом основного этапа раунда
-    
-    # Основной игровой цикл
-    while True:
-        # Пример автоматизированных действий
-        build_base(1, 1)
-        attack_zombie(2, 2)
-        
-        # Ожидание завершения хода (примерное время хода 2 секунды)
-        time.sleep(2)
+# Регистрация на раунд
+register_for_round()
 
-register_for_round
+# Отправка команд
+#send_commands(build_commands, attack_commands)
