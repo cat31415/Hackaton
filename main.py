@@ -47,19 +47,32 @@ def send_commands(build_commands, attack_commands):
         print(f"Failed to send commands: {response.status_code} {response.text}")
 
 
-def get_base_info():
+def get_map_info():
     url = f'{BASE_URL}/play/zombidef/world'
     response = requests.get(url, headers=headers)
     print(f"Request URL: {url}")
     print(f"Request Headers: {headers}")
     print(f"Response Status Code: {response.status_code}")
-    print(f"Response Text: {response.text}")
     if response.status_code == 200:
         base_info = response.json()
         print("Base information retrieved successfully.")
         print(json.dumps(base_info, indent=4))
     else:
         print(f"Failed to retrieve base information: {response.status_code} {response.text}")
+
+def get_units_info():
+    url = f'{BASE_URL}/play/zombidef/units'
+    response = requests.get(url, headers=headers)
+    print(f"Request URL: {url}")
+    print(f"Request Headers: {headers}")
+    print(f"Response Status Code: {response.status_code}")
+    if response.status_code == 200:
+        base_info = response.json()
+        print("Base information retrieved successfully.")
+        print(json.dumps(base_info, indent=4))
+    else:
+        print(f"Failed to retrieve base information: {response.status_code} {response.text}")
+
 
 # Пример команд на строительство и атаку
 build_commands = [
@@ -74,4 +87,5 @@ attack_commands = [
 #register_for_round()
 
 # Отправка команд
-get_base_info()
+get_map_info()
+get_units_info()
