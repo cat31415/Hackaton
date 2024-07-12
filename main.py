@@ -1,7 +1,7 @@
 import requests
 import time
 
-BASE_URL = "https://games-test.datsteam.dev/"
+BASE_URL = "6690ca5ad88f26690ca5ad88f6"
 AUTH_TOKEN = "your_auth_token_here"
 HEADERS = {
     "X-Auth-Token": AUTH_TOKEN,
@@ -50,3 +50,5 @@ if __name__ == "__main__":
         
         # Ожидание завершения хода (примерное время хода 2 секунды)
         time.sleep(2)
+
+register_for_round
