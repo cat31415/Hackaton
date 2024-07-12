@@ -29,11 +29,14 @@ def register_for_round():
     else:
         print(f"Failed to register: {response.status_code} {response.text}")
 
-# Функция для отправки команд на строительство и атаку
-def send_commands(build_commands, attack_commands):
+
+# Функция для выполнения действий: атака, строительство, перемещение базы
+def send_action_commands(attack_commands, build_commands, move_base_command):
     url = f'{BASE_URL}/play/zombidef/command'
     commands = {
+        "attack": attack_commands,
         "build": build_commands,
+        "moveBase": move_base_command
     }
     response = requests.post(url, headers=headers, data=json.dumps(commands))
     print(f"Request URL: {url}")
@@ -45,6 +48,29 @@ def send_commands(build_commands, attack_commands):
         print("Commands sent successfully.")
     else:
         print(f"Failed to send commands: {response.status_code} {response.text}")
+
+# Пример команд на атаку, строительство и перемещение базы
+attack_commands = [
+    {
+        "blockId": "0190a80a-8727-7dda-944b-ec59917f13f8",
+        "target": {
+            "x": 2,
+            "y": 2
+        }
+    }
+]
+
+build_commands = [
+    {
+        "x": 2,
+        "y": 2
+    }
+]
+
+move_base_command = {
+    "x": 1,
+    "y": 1
+}
 
 
 def get_map_info():
@@ -68,24 +94,19 @@ def get_units_info():
     print(f"Response Status Code: {response.status_code}")
     if response.status_code == 200:
         base_info = response.json()
-        print("Base information retrieved successfully.")
+        print("Units retrieved successfully.")
         print(json.dumps(base_info, indent=4))
     else:
-        print(f"Failed to retrieve base information: {response.status_code} {response.text}")
+        print(f"Failed to retrieve units information: {response.status_code} {response.text}")
 
-
-# Пример команд на строительство и атаку
-build_commands = [
-    {"x": 1, "y": 1}
-]
-
-attack_commands = [
-    {"x": 10, "y": 10}
-]
 
 # Регистрация на раунд
 #register_for_round()
 
 # Отправка команд
-get_map_info()
-get_units_info()
+#send_action_commands(attack_commands, build_commands, move_base_command)
+
+#register_for_round()
+#get_map_info()
+#get_units_info()
+send_action_commands(attack_commands, build_commands, move_base_command)
