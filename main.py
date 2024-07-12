@@ -1,6 +1,13 @@
 import requests
 import json
-
+import os
+def read_json_file():
+    file_name = "exampleMap.json"
+    current_dir = os.path.dirname(__file__)
+    file_path = os.path.join(current_dir, file_name)
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+    return data
 # Установите ваш токен аутентификации
 AUTH_TOKEN = '6690ca5ad88f26690ca5ad88f6'
 BASE_URL = 'https://games-test.datsteam.dev/'
@@ -10,15 +17,6 @@ headers = {
     'Content-Type': 'application/json',
     'X-Auth-Token': AUTH_TOKEN
 }
-
-# Функция для регистрации на раунд
-def register_for_round():
-    url = f'{BASE_URL}/play/zombidef/participate'
-    response = requests.put(url, headers=headers)
-    if response.status_code == 200:
-        print("Successfully registered for the round.")
-    else:
-        print(f"Failed to register: {response.status_code} {response.text}")
 
 # Функция для регистрации на раунд
 def register_for_round():
@@ -49,29 +47,6 @@ def send_action_commands(attack_commands, build_commands, move_base_command):
     else:
         print(f"Failed to send commands: {response.status_code} {response.text}")
 
-# Пример команд на атаку, строительство и перемещение базы
-attack_commands = [
-    {
-        "blockId": "0190a80a-8727-7dda-944b-ec59917f13f8",
-        "target": {
-            "x": 2,
-            "y": 2
-        }
-    }
-]
-
-build_commands = [
-    {
-        "x": 2,
-        "y": 2
-    }
-]
-
-move_base_command = {
-    "x": 1,
-    "y": 1
-}
-
 
 def get_map_info():
     url = f'{BASE_URL}/play/zombidef/world'
@@ -83,8 +58,10 @@ def get_map_info():
         base_info = response.json()
         print("Base information retrieved successfully.")
         print(json.dumps(base_info, indent=4))
+        return base_info
     else:
         print(f"Failed to retrieve base information: {response.status_code} {response.text}")
+        return 0
 
 def get_units_info():
     url = f'{BASE_URL}/play/zombidef/units'
@@ -96,9 +73,22 @@ def get_units_info():
         base_info = response.json()
         print("Units retrieved successfully.")
         print(json.dumps(base_info, indent=4))
+        return base_info
     else:
         print(f"Failed to retrieve units information: {response.status_code} {response.text}")
 
+def work_with_base(map_info):
+    bases = {}
+
+    # Сохранение информации о базах в словарь
+    if map_info and 'base' in map_info:
+        for zpot in map_info['base']:
+            base_id = zpot.get('id')  # Предполагается, что у каждой базы есть уникальный идентификатор 'id'
+            bases[base_id] = {
+                'x': zpot['x'],
+                'y': zpot['y'],
+            }
+    print("\n" + bases)
 
 # Регистрация на раунд
 #register_for_round()
@@ -107,6 +97,8 @@ def get_units_info():
 #send_action_commands(attack_commands, build_commands, move_base_command)
 
 #register_for_round()
-#get_map_info()
+get_map_info()
+map_info = get_units_info()
+work_with_base(map_info)
 #get_units_info()
-send_action_commands(attack_commands, build_commands, move_base_command)
+#send_action_commands(attack_commands, build_commands, move_base_command)

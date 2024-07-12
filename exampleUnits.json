@@ -1,0 +1,454 @@
+
+{
+    "realmName": "test-day1-6-1",
+    "player": {
+        "gold": 10,
+        "points": 0,
+        "name": "Space Cats",
+        "zombieKills": 0,
+        "enemyBlockKills": 0,
+        "gameEndedAt": null
+    },
+    "base": [
+        {
+            "id": "0190a80a-8727-7dda-944b-ec59917f13f8",
+            "x": 352,
+            "y": 8,
+            "health": 54,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        },
+        {
+            "id": "0190a80a-8727-7dd2-a687-d62162b1616e",
+            "x": 352,
+            "y": 7,
+            "health": 260,
+            "attack": 40,
+            "range": 8,
+            "isHead": true,
+            "lastAttack": null
+        },
+        {
+            "id": "0190a80a-8727-7dde-a8cb-336b3e2bc3a9",
+            "x": 353,
+            "y": 8,
+            "health": 80,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        }
+    ],
+    "zombies": [
+        {
+            "x": 363,
+            "y": 8,
+            "id": "af34d161-8b4c-4f09-878f-5e3abdac8d52",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "down"
+        },
+        {
+            "x": 349,
+            "y": 16,
+            "id": "9e646fb4-663b-43a7-9715-bebe4f2a941a",
+            "type": "normal",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 362,
+            "y": 2,
+            "id": "64939e1a-e621-4374-adfa-4f2912a791f1",
+            "type": "juggernaut",
+            "health": 13,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "right"
+        },
+        {
+            "x": 346,
+            "y": 4,
+            "id": "147cf0b9-c4ae-45bf-b2a6-260b99b1ad4b",
+            "type": "normal",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 355,
+            "y": 2,
+            "id": "30da657b-be98-4ac0-b77f-9cc4f1c09adc",
+            "type": "normal",
+            "health": 13,
+            "attack": 25,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 351,
+            "y": 7,
+            "id": "b09a9466-fbe1-4dda-bffd-b7c0962bf209",
+            "type": "juggernaut",
+            "health": 11,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 348,
+            "y": 7,
+            "id": "3301f3fd-cb6b-4b17-9cbd-e4d02909556a",
+            "type": "bomber",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 353,
+            "y": 2,
+            "id": "846f67db-54bb-486e-b481-a35685e6c89e",
+            "type": "chaos_knight",
+            "health": 11,
+            "attack": 19,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 356,
+            "y": 1,
+            "id": "3935bf9c-ea77-4f68-b532-243227fedfa2",
+            "type": "normal",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 356,
+            "y": 7,
+            "id": "3a4cf21d-45d2-4b91-b386-d48329f8b3be",
+            "type": "juggernaut",
+            "health": 11,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "down"
+        },
+        {
+            "x": 349,
+            "y": 2,
+            "id": "66544661-02a0-4e44-a014-65ad9befb205",
+            "type": "chaos_knight",
+            "health": 11,
+            "attack": 19,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 346,
+            "y": 3,
+            "id": "1010911a-5c09-4c6c-9de9-0b253bba29bb",
+            "type": "bomber",
+            "health": 13,
+            "attack": 25,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 352,
+            "y": 3,
+            "id": "2d9a9ff3-abe5-4ed2-a7a9-51acee9c6d9b",
+            "type": "juggernaut",
+            "health": 11,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "down"
+        },
+        {
+            "x": 362,
+            "y": 1,
+            "id": "713d4b99-6b1e-4b7d-a8dd-a87177e5f282",
+            "type": "juggernaut",
+            "health": 13,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 362,
+            "y": 1,
+            "id": "0e75130a-e6f6-4463-92ff-024f99f046e6",
+            "type": "fast",
+            "health": 11,
+            "attack": 19,
+            "speed": 2,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 348,
+            "y": 16,
+            "id": "da39eb43-4600-4a4d-a5ca-716f556c7b2f",
+            "type": "bomber",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 358,
+            "y": 13,
+            "id": "316d71c4-f803-4d83-822b-81d762edf61e",
+            "type": "fast",
+            "health": 11,
+            "attack": 19,
+            "speed": 2,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 358,
+            "y": 9,
+            "id": "51152494-df3d-4472-b543-e57415178d95",
+            "type": "normal",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 348,
+            "y": 14,
+            "id": "5ae216aa-dbbd-4552-952d-bee81744ed0c",
+            "type": "juggernaut",
+            "health": 11,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 357,
+            "y": 13,
+            "id": "cd83a3ba-58eb-4da4-bbb3-51a8f7107ea0",
+            "type": "chaos_knight",
+            "health": 11,
+            "attack": 19,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 357,
+            "y": 13,
+            "id": "c7a987d7-fa10-48f0-adc3-e4156dd02245",
+            "type": "liner",
+            "health": 13,
+            "attack": 25,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 354,
+            "y": 13,
+            "id": "e3931e5b-95b7-44f0-9a87-be4221ce15ff",
+            "type": "juggernaut",
+            "health": 7,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 361,
+            "y": 2,
+            "id": "2065c4e9-d5bb-49c7-bfbc-54cad49971ef",
+            "type": "bomber",
+            "health": 13,
+            "attack": 25,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 358,
+            "y": 15,
+            "id": "c1e1d340-d4fe-4d0d-8066-0a415180304a",
+            "type": "fast",
+            "health": 11,
+            "attack": 19,
+            "speed": 2,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 356,
+            "y": 5,
+            "id": "aee2da04-1d6d-4e3c-a7bf-2f91a46b7e84",
+            "type": "liner",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 344,
+            "y": 7,
+            "id": "9557c9ac-c429-41ad-9d34-09fe1ee6188a",
+            "type": "juggernaut",
+            "health": 13,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "left"
+        },
+        {
+            "x": 347,
+            "y": 3,
+            "id": "9983043c-b0c7-4293-b5cd-e33a3f4b7fae",
+            "type": "juggernaut",
+            "health": 11,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 355,
+            "y": 12,
+            "id": "debff356-ac81-4ab6-a87b-603999cb6872",
+            "type": "liner",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 348,
+            "y": 12,
+            "id": "7eaec6b7-aa29-464b-b028-a69af89a119b",
+            "type": "fast",
+            "health": 13,
+            "attack": 25,
+            "speed": 2,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 351,
+            "y": 11,
+            "id": "cb099d42-976e-440b-9de4-6fbccdceb6ee",
+            "type": "chaos_knight",
+            "health": 11,
+            "attack": 19,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 354,
+            "y": 8,
+            "id": "dd2d7594-6073-469a-bb6b-7ce4a0aeba0c",
+            "type": "normal",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 343,
+            "y": 11,
+            "id": "fb94c7b2-1378-452f-a797-822a305f08f8",
+            "type": "juggernaut",
+            "health": 3,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "left"
+        },
+        {
+            "x": 348,
+            "y": 5,
+            "id": "2c7dcb56-046d-46b5-a975-2a9b3c9c85ed",
+            "type": "chaos_knight",
+            "health": 11,
+            "attack": 19,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 358,
+            "y": 5,
+            "id": "59ae9f09-17e4-41f5-9367-dceb224b7b1a",
+            "type": "normal",
+            "health": 13,
+            "attack": 25,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 356,
+            "y": 6,
+            "id": "d8b6c62e-8adc-4e7e-9a50-ae3f7ba3dc20",
+            "type": "normal",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 358,
+            "y": 3,
+            "id": "9a112bd0-89db-4b6a-8f53-991b83aae141",
+            "type": "fast",
+            "health": 11,
+            "attack": 19,
+            "speed": 2,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 344,
+            "y": 2,
+            "id": "159c0713-e204-4a76-acae-e3978d1a41cf",
+            "type": "liner",
+            "health": 13,
+            "attack": 25,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        }
+    ],
+    "enemyBlocks": null,
+    "turnEndsInMs": 459,
+    "turn": 47
+}
