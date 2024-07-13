@@ -36,9 +36,14 @@ def api_get_request(url: str) -> dict:
         print(f"API request error: {e}")
         return {}
 
+
 def register_for_round():
     url = f'{BASE_URL}/play/zombidef/participate'
-    api_put_request(url)
+    response = requests.put(url, headers=HEADERS)
+    if response.status_code == 200:
+        print("Successfully registered for the round.")
+    else:
+        print(f"Failed to register: {response.status_code} {response.text}")
 
 def send_action_commands(attack_commands: list, build_commands: list, move_base_command: dict):
     url = f'{BASE_URL}/play/zombidef/command'

@@ -63,7 +63,7 @@ def build_request(game_map: GameMap, player_gold: int) -> list:
     commands = []
 
     # Find all connected bases
-    connected_bases = find_connected_bases(game_map)
+    connected_bases = find_connected_blocks(game_map)
     # Find valid build positions around the connected bases
     build_positions = find_build_positions(game_map, connected_bases)
 
