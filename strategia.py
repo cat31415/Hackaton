@@ -143,8 +143,9 @@ def decide_actions(game_map):
             if current_health > 0:
                 attack_commands.append({
                     "id": base['id'],
+                    "targe":{
                     "x": zombie['x'],  # Атакуем текущую позицию зомби
-                    "y": zombie['y']   # Атакуем текущую позицию зомби
+                    "y": zombie['y'] }  # Атакуем текущую позицию зомби
                 })
                 current_health -= base['attack']
                 if current_health <= 0:

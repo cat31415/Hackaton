@@ -42,7 +42,7 @@ def main():
             send_action_commands(commands['attack'], commands['build'], commands['moveBase'])
             end_time = time.time()
             # Wait for the next turn (commented out for testing)
-            time.sleep(2 - (end_time - start_time))  # Assuming each turn takes 2 seconds; adjust as needed
+            time.sleep(max(0, 2 - (end_time - start_time)))  # Assuming each turn takes 2 seconds; adjust as needed
 
 if __name__ == "__main__":
     main()

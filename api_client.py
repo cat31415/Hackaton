@@ -68,6 +68,8 @@ def api_post_request(url: str, data: dict):
     try:
         response = requests.post(url, headers=HEADERS, json=data)
         response.raise_for_status()
+       
         print("Commands sent successfully.")
     except requests.RequestException as e:
+        print(data)
         print(f"Failed to send commands: {e}")
