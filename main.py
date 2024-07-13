@@ -12,8 +12,10 @@ def main():
     time_to_start = register_for_round()
     if(time_to_start != -1):
         print(time_to_start)
-        time.sleep(time_to_start)
+        time.sleep(time_to_start['startsInSec'])
+        
         while True:
+            start_time = time.time()
             # Get static and dynamic blocks from the local JSON files for testing
             static_blocks = get_static_blocks()
             dynamic_blocks = get_dynamic_blocks()
@@ -38,9 +40,9 @@ def main():
 
             # Send build commands to the server (commented out for testing)
             send_action_commands(commands['attack'], commands['build'], commands['moveBase'])
-            plot_game_map(game_map)
+            end_time = time.time()
             # Wait for the next turn (commented out for testing)
-            time.sleep(2)  # Assuming each turn takes 2 seconds; adjust as needed
+            time.sleep(2 - (end_time - start_time))  # Assuming each turn takes 2 seconds; adjust as needed
 
 if __name__ == "__main__":
     main()
