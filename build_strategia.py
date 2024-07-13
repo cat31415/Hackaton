@@ -63,16 +63,17 @@ def build_request(game_map: GameMap, player_gold: int) -> list:
     commands = []
 
     # Find all connected bases
-    connected_bases = find_connected_blocks(game_map)
-    # Find valid build positions around the connected bases
-    build_positions = find_build_positions(game_map, connected_bases)
+    if(player_gold > 0):
+        connected_bases = find_connected_blocks(game_map)
+        # Find valid build positions around the connected bases
+        build_positions = find_build_positions(game_map, connected_bases)
 
-    # Generate build commands
-    for px, py in build_positions:
-        if player_gold > 0:
-            commands.append({"x": px, "y": py})
-            player_gold -= 1
-        else:
-            break
+        # Generate build commands
+        for px, py in build_positions:
+            if player_gold > 0:
+                commands.append({"x": px, "y": py})
+                player_gold -= 1
+            else:
+                break
 
     return commands

@@ -10,6 +10,7 @@ def main():
 
     # Register for the round (commented out for testing)
     time_to_start = register_for_round()
+    next = True
     if(time_to_start != -1):
         print(time_to_start)
         time.sleep(time_to_start['startsInSec'])
@@ -29,7 +30,7 @@ def main():
 
             # Create build commands
             build_commands = build_request(game_map, player_gold)
-            attack_commands = decide_actions(game_map)
+            attack_commands = decide_actions(game_map, next)
             move_base_command = None  # Adjust if needed
 
             commands = {
@@ -42,6 +43,8 @@ def main():
             send_action_commands(commands['attack'], commands['build'], commands['moveBase'])
             end_time = time.time()
             # Wait for the next turn (commented out for testing)
+            if(2 - (end_time - start_time > 0)):
+                next = False
             time.sleep(max(0, 2 - (end_time - start_time)))  # Assuming each turn takes 2 seconds; adjust as needed
 
 if __name__ == "__main__":

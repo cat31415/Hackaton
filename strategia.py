@@ -1,5 +1,3 @@
-import time
-from api_client import get_static_blocks, get_dynamic_blocks, register_for_round, send_action_commands
 from game_map import GameMap
 import math
 
@@ -59,7 +57,7 @@ def is_direct_threat(zombie, base):
 
 def analyze_threats(game_map):
     all_bases = game_map.player_bases
-    all_blocks = game_map.get_all_blocks()
+    all_blocks = game_map.all_blocks
     
     nearby_zombies = all_blocks[(all_blocks['type'] == 'zombie') | (all_blocks['type'] == 'enemy_base')]
     
@@ -80,24 +78,11 @@ def analyze_threats(game_map):
     
     return threats
 
-def will_attack_base(zombie, base):
-    if zombie['waitTurns'] > 1:
-        return False  # Зомби не сможет атаковать на следующем ходу
-    if zombie['x'] == base['x'] and zombie['y'] == base['y']:
-        return True  # Зомби уже на базе, будет атаковать
-    if zombie['type'] == 'bomber':
-        if abs(zombie['x'] - base['x']) <= 1 and abs(zombie['y'] - base['y']) <= 1:
-            return True  # Зомби типа "bomber" атакует все клетки в радиусе 1
-    if zombie['type'] == 'liner':
-        if abs(zombie['x'] - base['x']) <= 1 and abs(zombie['y'] - base['y']) <= 1:
-            return True  # Зомби типа "liner" атакует все клетки рядом с базой
-    return False
-
 def prioritize_threats(threats, game_map):
     def threat_level(threat, game_map):
         base, zombie, x, y = threat
         all_bases = game_map.player_bases
-        enemy_bases = game_map.get_all_blocks()[game_map.get_all_blocks()['type'] == 'enemy_base']
+        enemy_bases = game_map.all_blocks[game_map.all_blocks['type'] == 'enemy_base']
         main_enemy_base = enemy_bases[enemy_bases['isHead']]
         # Прямые угрозы
         if is_direct_threat(zombie, base):
@@ -125,14 +110,14 @@ def prioritize_threats(threats, game_map):
         return 1
     return sorted(threats, key=lambda x: (threat_level(x, game_map), -math.sqrt((x[0]['x'] - x[2]) ** 2 + (x[0]['y'] - x[3]) ** 2) , -x[1]['health']), reverse=True)
 
-def decide_actions(game_map):
+def decide_actions(game_map, next = True):
     threats = analyze_threats(game_map)
     attack_commands = []
     bases_attacked = set()
 
     prioritized_threats = prioritize_threats(threats, game_map)
     zombie_health = {}
-    all_blocks = game_map.get_all_blocks()
+    all_blocks = game_map.all_blocks
     for _, zombie in all_blocks[(all_blocks['type'] == 'zombie') | (all_blocks['type'] == 'enemy_base')].iterrows():
         
         zombie_health[zombie['id']] = zombie['health']
@@ -142,10 +127,10 @@ def decide_actions(game_map):
             current_health = zombie_health.get(zombie['id'], 0)
             if current_health > 0:
                 attack_commands.append({
-                    "id": base['id'],
-                    "targe":{
-                    "x": zombie['x'],  # Атакуем текущую позицию зомби
-                    "y": zombie['y'] }  # Атакуем текущую позицию зомби
+                    "blockId": base['id'],
+                    "target":{
+                    "x": zombie['x'] if next else next_x,  # Атакуем текущую позицию зомби
+                    "y": zombie['y'] if next else next_y}  # Атакуем текущую позицию зомби
                 })
                 current_health -= base['attack']
                 if current_health <= 0:

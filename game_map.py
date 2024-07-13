@@ -57,6 +57,7 @@ class GameMap:
         self.player_bases = pd.DataFrame(columns=['id', 'x', 'y', 'health', 'attack', 'range', 'isHead'])
         self.enemy_bases = pd.DataFrame(columns=['id', 'x', 'y', 'health', 'attack', 'range', 'isHead'])
         self.zombies = pd.DataFrame(columns=['id', 'x', 'y', 'health', 'attack', 'type', 'speed', 'waitTurns', 'direction'])
+        self.all_blocks = self.get_all_blocks()
 
     def add_static_block(self, x: int, y: int, type: str):
         self.static_blocks = self.static_blocks.append({'x': x, 'y': y, 'type': type}, ignore_index=True)
@@ -80,11 +81,11 @@ class GameMap:
         return all_blocks
 
     def get_blocks_by_coordinates(self, x: int, y: int) -> pd.DataFrame:
-        all_blocks = self.get_all_blocks()
+        all_blocks = self.all_blocks
         return all_blocks[(all_blocks['x'] == x) & (all_blocks['y'] == y)]
 
     def get_nearby_blocks(self, x: int, y: int, radius: int) -> pd.DataFrame:
-        all_blocks = self.get_all_blocks()
+        all_blocks = self.all_blocks
         return all_blocks[((all_blocks['x'] - x) ** 2 + (all_blocks['y'] - y) ** 2) ** 0.5 <= radius]
 
     def load_static_blocks(self, json_data):
