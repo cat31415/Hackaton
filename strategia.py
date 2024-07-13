@@ -3,7 +3,6 @@ from api_client import get_static_blocks, get_dynamic_blocks, register_for_round
 from game_map import GameMap
 import math
 
-# Функция для предсказания следующей позиции зомби
 def predict_next_position(zombie):
     direction = zombie['direction']
     x, y = zombie['x'], zombie['y']
@@ -19,7 +18,6 @@ def predict_next_position(zombie):
 
     return x, y
 
-# Функция для предсказания следующей позиции fast зомби
 def predict_next_position_fast(zombie):
     direction = zombie['direction']
     x, y = zombie['x'], zombie['y']
@@ -35,15 +33,14 @@ def predict_next_position_fast(zombie):
 
     return x, y
 
-# Функция для предсказания следующих позиций chaos_knight зомби
 def predict_next_position_chaos_knight(zombie):
     direction = zombie['direction']
     x, y = zombie['x'], zombie['y']
     
     if direction == 'up':
-        return [(x + 1, y + 2), (x - 1, y + 2)]
-    elif direction == 'down':
         return [(x + 1, y - 2), (x - 1, y - 2)]
+    elif direction == 'down':
+        return [(x + 1, y + 2), (x - 1, y + 2)]
     elif direction == 'right':
         return [(x + 2, y + 1), (x + 2, y - 1)]
     elif direction == 'left':
@@ -56,6 +53,10 @@ def is_within_attack_range(base, target_x, target_y):
     distance = math.sqrt(range_x ** 2 + range_y ** 2)
     return distance <= base['range']
 
+def is_direct_threat(zombie, base):
+    next_x, next_y = predict_next_position(zombie)
+    return next_x == base['x'] and next_y == base['y']
+
 def analyze_threats(game_map):
     all_bases = game_map.player_bases
     nearby_zombies = game_map.get_all_blocks()[game_map.get_all_blocks()['type'] == 'zombie']
@@ -64,9 +65,9 @@ def analyze_threats(game_map):
     for _, base in all_bases.iterrows():
         for _, zombie in nearby_zombies.iterrows():
             next_positions = []
-            if zombie['zombie_type'] == 'fast':
+            if zombie['type'] == 'fast':
                 next_positions.append(predict_next_position_fast(zombie))
-            elif zombie['zombie_type'] == 'chaos_knight':
+            elif zombie['type'] == 'chaos_knight':
                 next_positions.extend(predict_next_position_chaos_knight(zombie))
             else:
                 next_positions.append(predict_next_position(zombie))
@@ -77,66 +78,63 @@ def analyze_threats(game_map):
     
     return threats
 
-def prioritize_threats(threats):
-    def threat_level(zombie):
-        if zombie['zombie_type'] in ['juggernaut', 'bomber']:
-            return 3
-        elif zombie['zombie_type'] in ['liner', 'chaos_knight']:
-            return 2
-        elif zombie['zombie_type'] in ['normal', 'fast']:
+def will_attack_base(zombie, base):
+    if zombie['waitTurns'] > 1:
+        return False  # Зомби не сможет атаковать на следующем ходу
+    if zombie['x'] == base['x'] and zombie['y'] == base['y']:
+        return True  # Зомби уже на базе, будет атаковать
+    if zombie['type'] == 'bomber':
+        if abs(zombie['x'] - base['x']) <= 1 and abs(zombie['y'] - base['y']) <= 1:
+            return True  # Зомби типа "bomber" атакует все клетки в радиусе 1
+    if zombie['type'] == 'liner':
+        if abs(zombie['x'] - base['x']) <= 1 and abs(zombie['y'] - base['y']) <= 1:
+            return True  # Зомби типа "liner" атакует все клетки рядом с базой
+    return False
+
+def prioritize_threats(threats, game_map):
+    def threat_level(zombie, game_map):
+        all_bases = game_map.player_bases
+        for _, base in all_bases.iterrows():
+            if will_attack_base(zombie, base):
+                return 5 
+            if zombie['type'] in ['juggernaut', 'bomber']:
+                return 4
+            elif zombie['type'] in ['liner', 'chaos_knight']:
+                return 3
+            elif zombie['type'] in ['normal', 'fast']:
+                return 2
             return 1
-        return 0
 
-    return sorted(threats, key=lambda x: (threat_level(x[1]), -x[1]['health'], -math.sqrt((x[0]['x'] - x[2]) ** 2 + (x[0]['y'] - x[3]) ** 2)), reverse=True)
+    return sorted(threats, key=lambda x: (threat_level(x[1], game_map), -x[1]['health'], -math.sqrt((x[0]['x'] - x[2]) ** 2 + (x[0]['y'] - x[3]) ** 2)), reverse=True)
 
-def decide_actions(game_map, threats):
+def decide_actions(game_map):
+    threats = analyze_threats(game_map)
     attack_commands = []
 
-    prioritized_threats = prioritize_threats(threats)
+    prioritized_threats = prioritize_threats(threats, game_map)
 
     for base, zombie, next_x, next_y in prioritized_threats:
-        if base['is_main']:
+        if base['isHead']:
             attack_commands.append({
-                "id": zombie['id'],
+                "id": base['id'],
                 "x": next_x,
                 "y": next_y
             })
 
     for base, zombie, next_x, next_y in prioritized_threats:
-        if not base['is_main']:
+        if not base['isHead']:
             if is_within_attack_range(base, next_x, next_y):
-                if zombie['health'] <= base['strength']:
+                if zombie['health'] <= base['attack']:
                     attack_commands.append({
-                        "id": zombie['id'],
                         "x": next_x,
                         "y": next_y
                     })
-                elif zombie['health'] > base['strength'] and is_within_attack_range(game_map.player_bases[game_map.player_bases['is_main']].iloc[0], next_x, next_y):
+                elif zombie['health'] > base['attack'] and is_within_attack_range(game_map.player_bases[game_map.player_bases['isHead']].iloc[0], next_x, next_y):
                     attack_commands.append({
-                        "id": zombie['id'],
                         "x": next_x,
                         "y": next_y
                     })
 
     return attack_commands
 
-def main():
-    register_for_round()
-    game_map = GameMap()
 
-    while True:
-        static_blocks = get_static_blocks()
-        game_map.load_static_blocks(static_blocks)
-
-        dynamic_blocks = get_dynamic_blocks()
-        game_map.load_dynamic_blocks(dynamic_blocks)
-
-        threats = analyze_threats(game_map)
-        attack_commands = decide_actions(game_map, threats)
-
-        send_action_commands(attack_commands, [], [])
-
-        time.sleep(2)
-
-if __name__ == "__main__":
-    main()

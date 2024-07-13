@@ -52,6 +52,7 @@ def send_action_commands(attack_commands: list, build_commands: list, move_base_
         "build": build_commands,
         "moveBase": move_base_command
     }
+    print(commands)
     api_post_request(url, commands)
 
 def api_put_request(url: str):
