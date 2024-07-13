@@ -19,43 +19,48 @@ def read_json_file_Not_Stat():
         data = json.load(f)
     return data
 
-def get_static_blocks():
+def get_static_blocks() -> dict:
     url = f"{BASE_URL}/play/zombidef/world"
-    response = requests.get(url, headers=HEADERS)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Failed to get static blocks: {response.status_code} - {response.text}")
-        return []
+    return api_get_request(url)
 
-def get_dynamic_blocks():
+def get_dynamic_blocks() -> dict:
     url = f"{BASE_URL}/play/zombidef/units"
-    response = requests.get(url, headers=HEADERS)
-    if response.status_code == 200:
+    return api_get_request(url)
+
+def api_get_request(url: str) -> dict:
+    try:
+        response = requests.get(url, headers=HEADERS)
+        response.raise_for_status()
         return response.json()
-    else:
-        print(f"Failed to get dynamic blocks: {response.status_code} - {response.text}")
+    except requests.RequestException as e:
+        print(f"API request error: {e}")
         return {}
 
-# Функция для регистрации на раунд
 def register_for_round():
     url = f'{BASE_URL}/play/zombidef/participate'
-    response = requests.put(url, headers=HEADERS)
-    if response.status_code == 200:
-        print("Successfully registered for the round.")
-    else:
-        print(f"Failed to register: {response.status_code} {response.text}")
-        
-# Функция для выполнения действий: атака, строительство, перемещение базы
-def send_action_commands(attack_commands, build_commands, move_base_command):
+    api_put_request(url)
+
+def send_action_commands(attack_commands: list, build_commands: list, move_base_command: dict):
     url = f'{BASE_URL}/play/zombidef/command'
     commands = {
         "attack": attack_commands,
         "build": build_commands,
         "moveBase": move_base_command
     }
-    response = requests.post(url, headers=HEADERS, data=json.dumps(commands))
-    if response.status_code == 200:
+    api_post_request(url, commands)
+
+def api_put_request(url: str):
+    try:
+        response = requests.put(url, headers=HEADERS)
+        response.raise_for_status()
+        print("Successfully registered for the round.")
+    except requests.RequestException as e:
+        print(f"Failed to register: {e}")
+
+def api_post_request(url: str, data: dict):
+    try:
+        response = requests.post(url, headers=HEADERS, json=data)
+        response.raise_for_status()
         print("Commands sent successfully.")
-    else:
-        print(f"Failed to send commands: {response.status_code} {response.text}")
+    except requests.RequestException as e:
+        print(f"Failed to send commands: {e}")

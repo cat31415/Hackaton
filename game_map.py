@@ -38,6 +38,14 @@ class Zombie(Block):
         self.waitTurns = waitTurns
         self.direction = direction 
 
+class Player:
+    def __init__(self, name: str, gold: int, points: int, zombie_kills: int, enemy_block_kills: int):
+        self.name = name
+        self.gold = gold
+        self.points = points
+        self.zombie_kills = zombie_kills
+        self.enemy_block_kills = enemy_block_kills
+        
 class GameMap:
     def __init__(self):
         self.static_blocks = pd.DataFrame(columns=['x', 'y', 'type'])
@@ -88,3 +96,7 @@ class GameMap:
         if json_data['zombies']: 
             for block in json_data['zombies']:
                 self.add_zombie(block['id'], block['x'], block['y'], block['health'], block['attack'], block['type'], block['speed'], block['waitTurns'], block['direction'])
+        if json_data['player']:
+            player_data = json_data['player']
+            self.player = Player(player_data['name'], player_data['gold'], player_data['points'], player_data['zombieKills'], player_data['enemyBlockKills'])
+            
