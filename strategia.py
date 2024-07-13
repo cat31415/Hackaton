@@ -110,30 +110,36 @@ def prioritize_threats(threats, game_map):
 def decide_actions(game_map):
     threats = analyze_threats(game_map)
     attack_commands = []
+    bases_attacked = set()
 
     prioritized_threats = prioritize_threats(threats, game_map)
 
     for base, zombie, next_x, next_y in prioritized_threats:
-        if base['isHead']:
+        if base['isHead'] and base['id'] not in bases_attacked:
             attack_commands.append({
                 "id": base['id'],
                 "x": next_x,
                 "y": next_y
             })
+            bases_attacked.add(base['id'])
 
     for base, zombie, next_x, next_y in prioritized_threats:
-        if not base['isHead']:
+        if not base['isHead'] and base['id'] not in bases_attacked:
             if is_within_attack_range(base, next_x, next_y):
                 if zombie['health'] <= base['attack']:
                     attack_commands.append({
+                        "id": base['id'],
                         "x": next_x,
                         "y": next_y
                     })
+                    bases_attacked.add(base['id'])
                 elif zombie['health'] > base['attack'] and is_within_attack_range(game_map.player_bases[game_map.player_bases['isHead']].iloc[0], next_x, next_y):
                     attack_commands.append({
+                        "id": base['id'],
                         "x": next_x,
                         "y": next_y
                     })
+                    bases_attacked.add(base['id'])
 
     return attack_commands
 

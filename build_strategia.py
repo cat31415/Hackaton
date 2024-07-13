@@ -3,7 +3,7 @@ from game_map import GameMap
 from typing import Tuple, Set
 import pandas as pd
 
-def find_connected_blocks(game_map: GameMap) -> Set[Tuple[int, int]]:
+def find_connected_blocks(game_map: GameMap) -> pd.DataFrame:
     """Find all blocks connected to the main block."""
     main_block = game_map.player_bases[game_map.player_bases['isHead'] == True].iloc[0]
     connected_blocks = set([(main_block['x'], main_block['y'])])
@@ -20,7 +20,7 @@ def find_connected_blocks(game_map: GameMap) -> Set[Tuple[int, int]]:
                 connected_blocks.add((nx, ny))
                 to_visit.append((nx, ny))
 
-    return connected_blocks
+    return pd.DataFrame(list(connected_blocks), columns=['x', 'y'])
 
 def find_restricted_positions(game_map: GameMap) -> Set[Tuple[int, int]]:
     """Find all positions where building is not allowed."""
@@ -41,7 +41,8 @@ def find_restricted_positions(game_map: GameMap) -> Set[Tuple[int, int]]:
     for _, zombie in game_map.zombies.iterrows():
         zx, zy = zombie['x'], zombie['y']
         restricted_positions.add((zx, zy))
-
+    
+    return restricted_positions
 
 def find_build_positions(game_map: GameMap, connected_bases: pd.DataFrame) -> Set[Tuple[int, int]]:
     """Find all valid positions around the connected bases for building new blocks."""
@@ -56,7 +57,6 @@ def find_build_positions(game_map: GameMap, connected_bases: pd.DataFrame) -> Se
                 build_positions.add((px, py))
 
     return build_positions
-
 
 def build_request(game_map: GameMap, player_gold: int) -> list:
     """Generate build commands based on valid positions and available gold."""

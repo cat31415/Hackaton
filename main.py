@@ -1,16 +1,16 @@
 import time
-from api_client import read_json_file_Stat, read_json_file_Not_Stat, send_action_commands
+from api_client import *
 from game_map import GameMap
 from build_strategia import build_request
 from strategia import decide_actions
-
+from viz import *
 def main():
     # Initialize game map
     game_map = GameMap()
 
     # Register for the round (commented out for testing)
-    # register_for_round()
-
+    #register_for_round()
+    
     while True:
         # Get static and dynamic blocks from the local JSON files for testing
         static_blocks = read_json_file_Stat()
@@ -19,7 +19,7 @@ def main():
         # Update the game map with the current state
         game_map.load_static_blocks(static_blocks)
         game_map.load_dynamic_blocks(dynamic_blocks)
-
+        plot_game_map(game_map)
         # Get player gold from the updated game map
         player_gold = game_map.player.gold if game_map.player else 0
 
