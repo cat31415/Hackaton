@@ -29,6 +29,24 @@
             "lastAttack": null
         },
         {
+            "id": "x90a830-fae6-768c-852f-b307159ef298",
+            "x": 112,
+            "y": 156,
+            "health": 17,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        },  
+        {
+            "id": "ya830-fae6-768c-852f-b307159ef298",
+            "x": 113,
+            "y": 157,
+            "health": 17,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        },
+        {
             "id": "0190a830-fae6-7690-a59e-30b766462d64",
             "x": 112,
             "y": 157,
@@ -421,8 +439,8 @@
         "isHead": true,
         "lastAttack": {},
         "name": "player-test",
-        "x": 105,
-        "y": 157
+        "x": 114,
+        "y": 155
         }
         ],
     "turnEndsInMs": 1576,

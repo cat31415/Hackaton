@@ -59,7 +59,9 @@ def is_direct_threat(zombie, base):
 
 def analyze_threats(game_map):
     all_bases = game_map.player_bases
-    nearby_zombies = game_map.get_all_blocks()[game_map.get_all_blocks()['type'] == 'zombie']
+    all_blocks = game_map.get_all_blocks()
+    
+    nearby_zombies = all_blocks[(all_blocks['type'] == 'zombie') | (all_blocks['type'] == 'enemy_base')]
     
     threats = []
     for _, base in all_bases.iterrows():
@@ -92,20 +94,36 @@ def will_attack_base(zombie, base):
     return False
 
 def prioritize_threats(threats, game_map):
-    def threat_level(zombie, game_map):
+    def threat_level(threat, game_map):
+        base, zombie, x, y = threat
         all_bases = game_map.player_bases
-        for _, base in all_bases.iterrows():
-            if will_attack_base(zombie, base):
-                return 5 
-            if zombie['type'] in ['juggernaut', 'bomber']:
-                return 4
-            elif zombie['type'] in ['liner', 'chaos_knight']:
-                return 3
-            elif zombie['type'] in ['normal', 'fast']:
-                return 2
-            return 1
+        enemy_bases = game_map.get_all_blocks()[game_map.get_all_blocks()['type'] == 'enemy_base']
+        main_enemy_base = enemy_bases[enemy_bases['isHead']]
+        # Прямые угрозы
+        if is_direct_threat(zombie, base):
+            return 6
 
-    return sorted(threats, key=lambda x: (threat_level(x[1], game_map), -x[1]['health'], -math.sqrt((x[0]['x'] - x[2]) ** 2 + (x[0]['y'] - x[3]) ** 2)), reverse=True)
+        # Главная база противника
+        for _, enemy_base in main_enemy_base.iterrows():
+            if is_within_attack_range(base, enemy_base['x'], enemy_base['y']):
+                return 5
+
+        # Второстепенные базы противника
+        for _, enemy_base in enemy_bases.iterrows():
+            if is_within_attack_range(base, enemy_base['x'], enemy_base['y']):
+                return 4
+
+        # Опасные зомби (liner)
+        if zombie['type'] == 'liner':
+            return 3
+
+        # Зомби (bomber, juggernaut)
+        if zombie['type'] in ['bomber', 'juggernaut']:
+            return 2
+
+        # Все остальные зомби
+        return 1
+    return sorted(threats, key=lambda x: (threat_level(x, game_map), -math.sqrt((x[0]['x'] - x[2]) ** 2 + (x[0]['y'] - x[3]) ** 2) , -x[1]['health']), reverse=True)
 
 def decide_actions(game_map):
     threats = analyze_threats(game_map)
@@ -113,34 +131,27 @@ def decide_actions(game_map):
     bases_attacked = set()
 
     prioritized_threats = prioritize_threats(threats, game_map)
+    zombie_health = {}
+    all_blocks = game_map.get_all_blocks()
+    for _, zombie in all_blocks[(all_blocks['type'] == 'zombie') | (all_blocks['type'] == 'enemy_base')].iterrows():
+        
+        zombie_health[zombie['id']] = zombie['health']
 
     for base, zombie, next_x, next_y in prioritized_threats:
-        if base['isHead'] and base['id'] not in bases_attacked:
-            attack_commands.append({
-                "id": base['id'],
-                "x": next_x,
-                "y": next_y
-            })
-            bases_attacked.add(base['id'])
-
-    for base, zombie, next_x, next_y in prioritized_threats:
-        if not base['isHead'] and base['id'] not in bases_attacked:
-            if is_within_attack_range(base, next_x, next_y):
-                if zombie['health'] <= base['attack']:
-                    attack_commands.append({
-                        "id": base['id'],
-                        "x": next_x,
-                        "y": next_y
-                    })
-                    bases_attacked.add(base['id'])
-                elif zombie['health'] > base['attack'] and is_within_attack_range(game_map.player_bases[game_map.player_bases['isHead']].iloc[0], next_x, next_y):
-                    attack_commands.append({
-                        "id": base['id'],
-                        "x": next_x,
-                        "y": next_y
-                    })
-                    bases_attacked.add(base['id'])
+        if base['id'] not in bases_attacked:
+            current_health = zombie_health.get(zombie['id'], 0)
+            if current_health > 0:
+                attack_commands.append({
+                    "id": base['id'],
+                    "x": zombie['x'],  # Атакуем текущую позицию зомби
+                    "y": zombie['y']   # Атакуем текущую позицию зомби
+                })
+                current_health -= base['attack']
+                if current_health <= 0:
+                    del zombie_health[zombie['id']]
+                else:
+                    zombie_health[zombie['id']] = current_health
+                bases_attacked.add(base['id'])
 
     return attack_commands
-
 

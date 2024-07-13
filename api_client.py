@@ -42,8 +42,10 @@ def register_for_round():
     response = requests.put(url, headers=HEADERS)
     if response.status_code == 200:
         print("Successfully registered for the round.")
+        return response.json()
     else:
         print(f"Failed to register: {response.status_code} {response.text}")
+        return -1
 
 def send_action_commands(attack_commands: list, build_commands: list, move_base_command: dict):
     url = f'{BASE_URL}/play/zombidef/command'
@@ -52,7 +54,6 @@ def send_action_commands(attack_commands: list, build_commands: list, move_base_
         "build": build_commands,
         "moveBase": move_base_command
     }
-    print(commands)
     api_post_request(url, commands)
 
 def api_put_request(url: str):

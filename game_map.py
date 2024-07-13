@@ -1,4 +1,9 @@
 import pandas as pd
+import uuid
+
+def generate_uuid_hash():
+    # Генерация UUID4, который основан на случайных числах
+    return str(uuid.uuid4())
 
 class Block:
     def __init__(self, x: int, y: int):
@@ -92,7 +97,7 @@ class GameMap:
                 self.add_player_base(block['id'], block['x'], block['y'], block['health'], block['attack'], block['range'], block['isHead']if 'isHead' in block else False)
         if json_data['enemyBlocks']:
             for block in json_data['enemyBlocks']:
-                self.add_enemy_base(0, block['x'], block['y'], block['health'], block['attack'], 8 if 'isHead' in block else 5, block['isHead']if 'isHead' in block else False)
+                self.add_enemy_base(generate_uuid_hash(), block['x'], block['y'], block['health'], block['attack'], 8 if 'isHead' in block else 5, block['isHead']if 'isHead' in block else False)
         if json_data['zombies']: 
             for block in json_data['zombies']:
                 self.add_zombie(block['id'], block['x'], block['y'], block['health'], block['attack'], block['type'], block['speed'], block['waitTurns'], block['direction'])
